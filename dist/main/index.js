@@ -14442,7 +14442,7 @@ const path = __webpack_require__(5622);
 
 async function run() {
   try {
-    await exec.exec('sudo apt-get install lcov');
+    await exec.exec('sudo apt-get install -y lcov');
 
     const tmpPath = path.resolve(os.tmpdir(), github.context.action);
     const coverageFilesPattern = core.getInput('coverage-files');
@@ -14461,7 +14461,7 @@ async function run() {
     if (gitHubToken !== '') {
       const octokit = await github.getOctokit(gitHubToken);
       const prs = pullRequests(github);
-      for (let i=0; i < prs.length; i++) {
+      for (let i = 0; i < prs.length; i++) {
         const pr = prs[i];
         console.log(`Calculating coverage for PR ${pr.number}, sha ${pr.head.sha}...`);
         const summary = await summarize(coverageFile);
@@ -14516,7 +14516,7 @@ function pullRequests(github) {
     }
   }
   if (!!process.env.PR_SHA && !!process.env.PR_NUMBER &&
-      process.env.PR_SHA != "" && process.env.PR_NUMBER != "") {
+    process.env.PR_SHA != "" && process.env.PR_NUMBER != "") {
     return [{
       number: process.env.PR_NUMBER,
       head: {
@@ -14537,13 +14537,25 @@ function ownerRepo(url) {
 }
 
 async function genhtml(coverageFiles, tmpPath) {
-  const workingDirectory = core.getInput('working-directory').trim() || './';
   const artifactName = core.getInput('artifact-name').trim();
+
+  if (!artifactName || artifactName.length == 0) {
+    console.log('No artifact-name key given, skipping HTML report generation.');
+    return;
+  }
+
+  const workingDirectory = core.getInput('working-directory').trim() || './';
   const artifactPath = path.resolve(tmpPath, 'html').trim();
   const args = [...coverageFiles];
 
   args.push('--output-directory');
   args.push(artifactPath);
+
+  const branchCoverage = core.getInput('branch-coverage').trim() || 'true';
+  if (branchCoverage === 'true') {
+    args.push('--rc');
+    args.push('lcov_branch_coverage=1');
+  }
 
   await exec.exec('genhtml', args, { cwd: workingDirectory });
 

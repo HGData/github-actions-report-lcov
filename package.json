@@ -1,6 +1,6 @@
 {
   "name": "github-actions-report-lcov",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Report the code coverage from LCOV files",
   "main": "dist/main/index.js",
   "scripts": {
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zgosalvez/github-actions-report-lcov.git"
+    "url": "git+https://github.com/HGData/github-actions-report-lcov.git"
   },
   "keywords": [
     "actions",

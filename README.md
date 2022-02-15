@@ -1,15 +1,19 @@
 # GitHub Action — Report LCOV
 
 This GitHub Action (written in JavaScript) allows you to leverage GitHub Actions to report the code coverage from LCOV files. This action includes:
+
 - Generating an HTML report as an artifact
 - Commenting on a pull request (if the workflow was triggered by this event)
 - Failing if a minimum coverage is not met
 
 ## Usage
+
 ### Pre-requisites
+
 Create a workflow `.yml` file in your `.github/workflows` directory. An [example workflow](#common-workflow) is available below. For more information, reference the GitHub Help Documentation for [Creating a workflow file](https://help.github.com/en/articles/configuring-a-workflow#creating-a-workflow-file).
 
 ### Inputs
+
 For more information on these inputs, see the [Workflow syntax for GitHub Actions](https://docs.github.com/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstepswith)
 
 - `coverage-files`: The coverage files to scan. For example, `coverage/lcov.*.info`
@@ -20,6 +24,7 @@ For more information on these inputs, see the [Workflow syntax for GitHub Action
 - `branch-coverage`: Generate the branch coverage. Optional. Default: `true`
 
 ### Outputs
+
 None.
 
 Sample comment:
@@ -29,27 +34,29 @@ Sample comment:
 
 ```yaml
 on: pull_request
-
 name: Continuous Integration
 
 jobs:
   coverage_report:
-    name: Generate coverage report
+    name: Generate Coverage Report
     needs: testing
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
     # ... Generate LCOV files or download it from a different job
-    - name: Report code coverage
-      uses: mbta/github-actions-report-lcov@v1
+    - name: Report Code Coverage
+      uses: HGData/github-actions-report-lcov@v1
       with:
-        coverage-files: coverage/lcov.*.info
-        minimum-coverage: 90
+        coverage-files: cover/lcov.info
+        minimum-coverage: 60
         artifact-name: code-coverage-report
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        working-directory: apps/my-first-app
+        working-directory: ./
 ```
 
 ## License
+
 The scripts and documentation in this project are released under the [MIT License](LICENSE)
+
+## Credit
+
+Original code by [zgosalvez](https://github.com/zgosalvez/github-actions-report-lcov).
