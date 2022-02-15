@@ -9,7 +9,7 @@ const path = require('path');
 
 async function run() {
   try {
-    await exec.exec('sudo apt-get install lcov');
+    await exec.exec('sudo apt-get install -y lcov');
 
     const tmpPath = path.resolve(os.tmpdir(), github.context.action);
     const coverageFilesPattern = core.getInput('coverage-files');
@@ -28,7 +28,7 @@ async function run() {
     if (gitHubToken !== '') {
       const octokit = await github.getOctokit(gitHubToken);
       const prs = pullRequests(github);
-      for (let i=0; i < prs.length; i++) {
+      for (let i = 0; i < prs.length; i++) {
         const pr = prs[i];
         console.log(`Calculating coverage for PR ${pr.number}, sha ${pr.head.sha}...`);
         const summary = await summarize(coverageFile);
@@ -83,7 +83,7 @@ function pullRequests(github) {
     }
   }
   if (!!process.env.PR_SHA && !!process.env.PR_NUMBER &&
-      process.env.PR_SHA != "" && process.env.PR_NUMBER != "") {
+    process.env.PR_SHA != "" && process.env.PR_NUMBER != "") {
     return [{
       number: process.env.PR_NUMBER,
       head: {
