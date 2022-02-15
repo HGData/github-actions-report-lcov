@@ -104,8 +104,14 @@ function ownerRepo(url) {
 }
 
 async function genhtml(coverageFiles, tmpPath) {
-  const workingDirectory = core.getInput('working-directory').trim() || './';
   const artifactName = core.getInput('artifact-name').trim();
+
+  if (!artifactName || artifactName.length == 0) {
+    console.log('No artifact-name key given, skipping HTML report generation.');
+    return;
+  }
+
+  const workingDirectory = core.getInput('working-directory').trim() || './';
   const artifactPath = path.resolve(tmpPath, 'html').trim();
   const args = [...coverageFiles];
 
